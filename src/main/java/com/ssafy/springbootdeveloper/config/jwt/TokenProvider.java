@@ -23,7 +23,6 @@ public class TokenProvider {
 
     public String generateToken(User user, Duration expiredAt){
         Date now = new Date();
-//        new org.springframework.security.core.userdetails.User
         return makeToken(new Date(now.getTime() + expiredAt.toMillis()), user);
     }
 
@@ -55,6 +54,7 @@ public class TokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
+        // TODO : 실제 user의 권한 가져오기
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new
             SimpleGrantedAuthority("ROLE_USER"));
         return new UsernamePasswordAuthenticationToken(new User(claims.getSubject(),"",authorities), token, authorities);
