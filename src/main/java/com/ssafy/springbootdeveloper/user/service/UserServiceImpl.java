@@ -31,4 +31,10 @@ public class UserServiceImpl implements UserService {
                 .build()
         ).getId();
     }
+
+    @Override
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(()->new IllegalArgumentException("Unexpected user"));
+    }
 }
