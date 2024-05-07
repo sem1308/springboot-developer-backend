@@ -16,6 +16,7 @@ public class TokenServiceImpl implements TokenService {
     private final UserService userService;
 
     private final static Duration ACCESS_TOKEN_DURATION = Duration.ofHours(2);
+    private final static Duration REFRESH_TOKEN_DURATION = Duration.ofHours(10);
 
     @Override
     public String createNewAccessToken(String refreshToken) {
@@ -27,6 +28,16 @@ public class TokenServiceImpl implements TokenService {
 
         User user = userService.findById(userId);
 
+        return createAccessToken(user);
+    }
+
+    @Override
+    public String createAccessToken(User user) {
         return tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
+    }
+
+    @Override
+    public String createRefreshToken(User user) {
+        return tokenProvider.generateToken(user, REFRESH_TOKEN_DURATION);
     }
 }

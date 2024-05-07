@@ -21,13 +21,4 @@ public class UserApiController {
         long id = userService.save(request);
         return ResponseEntity.ok(id);
     }
-
-    @GetMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
-        new SecurityContextLogoutHandler().logout(request, response,
-            SecurityContextHolder.getContext().getAuthentication());
-        return ResponseEntity.ok().build();
-    }
-
-
 }

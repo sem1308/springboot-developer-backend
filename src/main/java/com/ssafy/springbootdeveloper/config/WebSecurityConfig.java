@@ -34,7 +34,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
             .authorizeHttpRequests() // 인증, 인가 설정
-            .requestMatchers("/api/articles/**", "/api/users/**").permitAll()
+            .requestMatchers("/api/articles/**","/api/token/login", "/api/users/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .csrf().disable() // csrf 비활성화
