@@ -65,7 +65,7 @@ class TokenApiControllerTest {
     @Test
     public void createNewAccessToken() throws Exception{
         // given
-        final String url="/api/token";
+        final String url="/api/token/refresh";
 
         User testUser=userRepository.save(User.builder()
             .email("user@gmail.com")
