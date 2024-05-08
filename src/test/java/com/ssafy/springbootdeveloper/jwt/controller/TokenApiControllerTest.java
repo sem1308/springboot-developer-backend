@@ -5,9 +5,12 @@ import com.ssafy.springbootdeveloper.config.jwt.JwtFactory;
 import com.ssafy.springbootdeveloper.config.jwt.JwtProperties;
 import com.ssafy.springbootdeveloper.jwt.domain.RefreshToken;
 import com.ssafy.springbootdeveloper.jwt.dto.CreateAccessTokenRequest;
+import com.ssafy.springbootdeveloper.jwt.dto.CreateTokenRequest;
 import com.ssafy.springbootdeveloper.jwt.repository.RefreshTokenRespository;
 import com.ssafy.springbootdeveloper.user.domain.User;
+import com.ssafy.springbootdeveloper.user.dto.AddUserRequest;
 import com.ssafy.springbootdeveloper.user.repository.UserRepository;
+import com.ssafy.springbootdeveloper.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,9 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -26,6 +27,9 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -44,6 +48,8 @@ class TokenApiControllerTest {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserService userService;
 
     @Autowired
     RefreshTokenRespository refreshTokenRespository;
@@ -79,14 +85,67 @@ class TokenApiControllerTest {
         final String requestBody=objectMapper.writeValueAsString(request);
 
         // when
-        ResultActions resultActions=mockMvc.perform(
-            MockMvcRequestBuilders.post(url)
+        ResultActions resultActions = mockMvc.perform(
+            post(url)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(requestBody));
 
         // then
         resultActions
-            .andExpect(MockMvcResultMatchers.status().isCreated())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.accessToken").isNotEmpty());
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.accessToken").isNotEmpty());
+    }
+
+    @DisplayName("login_success: 이메일과 비밀번호로 토큰 발급에 성공한다.")
+    @Test
+    public void login_success() throws Exception{
+        // given
+        String url="/api/token/login";
+        String email = "user@gmail.com";
+        String password = "test";
+        // 암호화를 위해 userService의 save 사용
+        userService.save(new AddUserRequest(email,password));
+
+        // token request 생성
+        CreateTokenRequest request=new CreateTokenRequest(email,password);
+
+        String requestBody=objectMapper.writeValueAsString(request);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        // then
+        resultActions
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.accessToken").isNotEmpty())
+                .andExpect(jsonPath("$.refreshToken").isNotEmpty());
+    }
+
+    @DisplayName("login_failed: 이메일과 비밀번호로 토큰 발급에 실패한다.")
+    @Test
+    public void login_failed() throws Exception{
+        // given
+        String url="/api/token/login";
+        String email = "user@gmail.com";
+        String password = "test";
+        // 암호화를 위해 userService의 save 사용
+        userService.save(new AddUserRequest(email,password));
+
+        // token request 생성
+        String loginPassword = "testt";
+        CreateTokenRequest request=new CreateTokenRequest(email,loginPassword);
+
+        String requestBody=objectMapper.writeValueAsString(request);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        // then
+        resultActions
+                .andExpect(status().isInternalServerError());
     }
 }
