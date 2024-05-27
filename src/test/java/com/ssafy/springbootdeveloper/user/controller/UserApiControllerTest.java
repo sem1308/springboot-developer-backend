@@ -1,7 +1,6 @@
 package com.ssafy.springbootdeveloper.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.springbootdeveloper.auth.dto.CreateTokenRequest;
 import com.ssafy.springbootdeveloper.auth.service.TokenService;
 import com.ssafy.springbootdeveloper.filter.TokenAuthenticationFilter;
 import com.ssafy.springbootdeveloper.user.domain.User;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,8 +21,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -109,7 +109,6 @@ class UserApiControllerTest {
 
         //when
         ResultActions resultActions = mockMvc.perform(get(url)
-                .contentType(MediaType.APPLICATION_JSON)
                 .header(TokenAuthenticationFilter.HEADER_AUTHORIZATION,TokenAuthenticationFilter.TOKEN_PREFIX+accessToken));
 
         //then
