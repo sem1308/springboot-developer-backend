@@ -38,7 +38,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, TokenProvider tokenProvider) throws Exception {
         return http
             .authorizeHttpRequests() // 인증, 인가 설정
-            .requestMatchers("/api/articles/**","/api/token/**").permitAll()
+            .requestMatchers("/api/articles/**","/api/auth/**").permitAll()
             .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
             .anyRequest().authenticated()
             .and()
