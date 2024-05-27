@@ -57,7 +57,7 @@ public class TokenProvider {
         // TODO : 실제 user의 권한 가져오기
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new
             SimpleGrantedAuthority("ROLE_USER"));
-        return new UsernamePasswordAuthenticationToken(new User(claims.getSubject(),"",authorities), token, authorities);
+        return new UsernamePasswordAuthenticationToken(User.builder().email(claims.getSubject()).password("").authorities(authorities).build(), token, authorities);
     }
 
     public Long getUserId(String token) {
