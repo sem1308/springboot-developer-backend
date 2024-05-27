@@ -1,4 +1,4 @@
-package com.ssafy.springbootdeveloper.jwt.service;
+package com.ssafy.springbootdeveloper.auth.service;
 
 import com.ssafy.springbootdeveloper.user.domain.User;
 

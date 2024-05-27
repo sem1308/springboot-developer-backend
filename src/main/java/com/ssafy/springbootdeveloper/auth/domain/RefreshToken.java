@@ -1,4 +1,4 @@
-package com.ssafy.springbootdeveloper.jwt.domain;
+package com.ssafy.springbootdeveloper.auth.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

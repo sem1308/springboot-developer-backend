@@ -1,7 +1,7 @@
-package com.ssafy.springbootdeveloper.jwt.service;
+package com.ssafy.springbootdeveloper.auth.service;
 
-import com.ssafy.springbootdeveloper.jwt.domain.RefreshToken;
-import com.ssafy.springbootdeveloper.jwt.repository.RefreshTokenRespository;
+import com.ssafy.springbootdeveloper.auth.domain.RefreshToken;
+import com.ssafy.springbootdeveloper.auth.repository.RefreshTokenRespository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

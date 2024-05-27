@@ -1,4 +1,4 @@
-package com.ssafy.springbootdeveloper.jwt.dto;
+package com.ssafy.springbootdeveloper.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

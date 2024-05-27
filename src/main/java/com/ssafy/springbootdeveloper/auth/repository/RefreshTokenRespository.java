@@ -1,6 +1,6 @@
-package com.ssafy.springbootdeveloper.jwt.repository;
+package com.ssafy.springbootdeveloper.auth.repository;
 
-import com.ssafy.springbootdeveloper.jwt.domain.RefreshToken;
+import com.ssafy.springbootdeveloper.auth.domain.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

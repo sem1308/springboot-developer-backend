@@ -1,22 +1,21 @@
-package com.ssafy.springbootdeveloper.jwt.controller;
+package com.ssafy.springbootdeveloper.auth.controller;
 
-import com.ssafy.springbootdeveloper.jwt.dto.CreateAccessTokenRequest;
-import com.ssafy.springbootdeveloper.jwt.dto.CreateAccessTokenResponse;
-import com.ssafy.springbootdeveloper.jwt.dto.CreateTokenRequest;
-import com.ssafy.springbootdeveloper.jwt.dto.CreateTokenResponse;
-import com.ssafy.springbootdeveloper.jwt.service.TokenService;
+import com.ssafy.springbootdeveloper.auth.dto.CreateAccessTokenRequest;
+import com.ssafy.springbootdeveloper.auth.dto.CreateAccessTokenResponse;
+import com.ssafy.springbootdeveloper.auth.dto.CreateTokenRequest;
+import com.ssafy.springbootdeveloper.auth.dto.CreateTokenResponse;
+import com.ssafy.springbootdeveloper.auth.service.TokenService;
 import com.ssafy.springbootdeveloper.user.domain.User;
 import com.ssafy.springbootdeveloper.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/token")
-public class TokenApiController {
+@RequestMapping("/api/auth")
+public class AuthApiController {
     private final TokenService tokenService;
     private final UserService userService;
 
