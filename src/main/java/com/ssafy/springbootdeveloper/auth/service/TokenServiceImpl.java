@@ -2,7 +2,7 @@ package com.ssafy.springbootdeveloper.auth.service;
 
 import com.ssafy.springbootdeveloper.config.jwt.JwtProperties;
 import com.ssafy.springbootdeveloper.auth.domain.RefreshToken;
-import com.ssafy.springbootdeveloper.auth.repository.RefreshTokenRespository;
+import com.ssafy.springbootdeveloper.auth.repository.RefreshTokenRepository;
 import com.ssafy.springbootdeveloper.user.domain.User;
 import com.ssafy.springbootdeveloper.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class TokenServiceImpl implements TokenService {
     private final TokenProvider tokenProvider;
     private final RefreshTokenService refreshTokenService;
-    private final RefreshTokenRespository refreshTokenRespository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final UserService userService;
 
     @Override
@@ -37,7 +37,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public String createRefreshToken(User user) {
         String refreshToken = tokenProvider.generateToken(user, JwtProperties.REFRESH_TOKEN_DURATION);
-        refreshTokenRespository.save(new RefreshToken(user.getId(), refreshToken));
+        refreshTokenRepository.save(new RefreshToken(user.getId(), refreshToken));
         return refreshToken;
     }
 }
