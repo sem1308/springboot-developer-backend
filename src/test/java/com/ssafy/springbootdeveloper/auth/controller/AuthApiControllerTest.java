@@ -21,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Map;
@@ -31,15 +32,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class AuthApiControllerTest {
     @Autowired
-    protected MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Autowired
-    protected ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
-    @Autowired
-    private WebApplicationContext context;
+//    @Autowired
+//    private WebApplicationContext context;
 
     @Autowired
     JwtProperties jwtProperties;
@@ -52,10 +54,11 @@ class AuthApiControllerTest {
     @Autowired
     RefreshTokenRespository refreshTokenRespository;
 
+    private final String BASE_URL = "/api/auth";
 
     @BeforeEach
-    public void mockMvcSetUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+    public void setUp() {
+//        this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
         userRepository.deleteAll();
     }
 
@@ -63,7 +66,7 @@ class AuthApiControllerTest {
     @Test
     public void createNewAccessToken() throws Exception{
         // given
-        final String url="/api/token/refresh";
+        final String url=BASE_URL+"/refresh";
 
         User testUser=userRepository.save(User.builder()
             .email("user@gmail.com")
@@ -98,7 +101,7 @@ class AuthApiControllerTest {
     @Test
     public void login_success() throws Exception{
         // given
-        String url="/api/token/login";
+        String url=BASE_URL+"/login";
         String email = "user@gmail.com";
         String password = "test";
         // 암호화를 위해 userService의 save 사용
@@ -125,7 +128,7 @@ class AuthApiControllerTest {
     @Test
     public void login_failed() throws Exception{
         // given
-        String url="/api/token/login";
+        String url=BASE_URL+"/login";
         String email = "user@gmail.com";
         String password = "test";
         // 암호화를 위해 userService의 save 사용
