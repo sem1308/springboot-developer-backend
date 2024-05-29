@@ -55,6 +55,7 @@ public class TokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
+        Long userId = getUserId(claims);
         // TODO : 실제 user의 권한 가져오기
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new
             SimpleGrantedAuthority("ROLE_USER"));
@@ -65,6 +66,11 @@ public class TokenProvider {
         Claims claims = getClaims(token);
         return claims.get("id", Long.class);
     }
+
+    public Long getUserId(Claims claims) {
+        return claims.get("id", Long.class);
+    }
+
     private Claims getClaims(String token) {
         return Jwts.parser() // 클레임 조회
             .setSigningKey(jwtProperties.getSecretKey())
