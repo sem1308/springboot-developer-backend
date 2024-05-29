@@ -1,6 +1,5 @@
 package com.ssafy.springbootdeveloper.auth.service;
 
-import com.ssafy.springbootdeveloper.config.jwt.TokenProvider;
 import com.ssafy.springbootdeveloper.user.domain.User;
 import com.ssafy.springbootdeveloper.user.dto.AddUserRequest;
 import com.ssafy.springbootdeveloper.user.service.UserService;
