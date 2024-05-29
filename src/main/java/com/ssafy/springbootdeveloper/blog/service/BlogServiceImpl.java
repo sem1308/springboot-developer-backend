@@ -17,8 +17,8 @@ public class BlogServiceImpl implements BlogService {
     private final BlogRepository blogRepository;
 
     @Override
-    public Article save(AddArticleRequest request) {
-        return blogRepository.save(request.toEntity());
+    public Article save(AddArticleRequest request, String userName) {
+        return blogRepository.save(request.toEntity(userName));
     }
 
     @Override
