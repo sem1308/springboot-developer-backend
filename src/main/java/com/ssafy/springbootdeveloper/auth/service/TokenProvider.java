@@ -1,5 +1,6 @@
-package com.ssafy.springbootdeveloper.config.jwt;
+package com.ssafy.springbootdeveloper.auth.service;
 
+import com.ssafy.springbootdeveloper.config.jwt.JwtProperties;
 import com.ssafy.springbootdeveloper.user.domain.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;

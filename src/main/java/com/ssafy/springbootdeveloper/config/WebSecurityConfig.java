@@ -1,11 +1,9 @@
 package com.ssafy.springbootdeveloper.config;
 
-import com.ssafy.springbootdeveloper.config.jwt.TokenProvider;
+import com.ssafy.springbootdeveloper.auth.service.TokenProvider;
 import com.ssafy.springbootdeveloper.filter.TokenAuthenticationFilter;
 import com.ssafy.springbootdeveloper.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

@@ -1,7 +1,6 @@
 package com.ssafy.springbootdeveloper.auth.service;
 
 import com.ssafy.springbootdeveloper.config.jwt.JwtProperties;
-import com.ssafy.springbootdeveloper.config.jwt.TokenProvider;
 import com.ssafy.springbootdeveloper.auth.domain.RefreshToken;
 import com.ssafy.springbootdeveloper.auth.repository.RefreshTokenRespository;
 import com.ssafy.springbootdeveloper.user.domain.User;

@@ -2,6 +2,7 @@ package com.ssafy.springbootdeveloper.config.jwt;
 
 import com.ssafy.springbootdeveloper.user.domain.User;
 import com.ssafy.springbootdeveloper.user.repository.UserRepository;
+import com.ssafy.springbootdeveloper.auth.service.TokenProvider;
 import io.jsonwebtoken.Jwts;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

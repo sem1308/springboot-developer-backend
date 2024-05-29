@@ -1,6 +1,6 @@
 package com.ssafy.springbootdeveloper.filter;
 
-import com.ssafy.springbootdeveloper.config.jwt.TokenProvider;
+import com.ssafy.springbootdeveloper.auth.service.TokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
