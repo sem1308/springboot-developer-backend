@@ -30,7 +30,7 @@ public class UserApiController {
             GetUserResponse userResponse = new GetUserResponse(user);
             return ResponseEntity.ok(userResponse);
         }else{
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.internalServerError().build();
         }
     }
 }
