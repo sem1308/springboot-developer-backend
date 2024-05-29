@@ -12,7 +12,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Set;
 
 @Table(name = "users")
@@ -29,6 +28,11 @@ public class User implements UserDetails {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    // 사용자 이름
+    @Column(name = "nickname", unique = true)
+    private String nickname;
+
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 
@@ -44,10 +48,17 @@ public class User implements UserDetails {
     Set<? extends GrantedAuthority> authorities;
 
     @Builder
-    public User(String email, String password, Set<? extends GrantedAuthority> authorities){
+    public User(String email, String password, String nickname, Set<? extends GrantedAuthority> authorities){
         this.email = email;
         this.password = password;
+        this.nickname = nickname;
         this.authorities = authorities;
+    }
+
+    // 사용자 이름 변경
+    public User update(String nickname){
+        this.nickname = nickname;
+        return this;
     }
 
     @Override
