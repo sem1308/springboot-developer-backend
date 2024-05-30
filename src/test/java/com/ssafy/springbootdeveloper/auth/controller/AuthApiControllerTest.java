@@ -1,12 +1,12 @@
 package com.ssafy.springbootdeveloper.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.springbootdeveloper.config.jwt.JwtFactory;
-import com.ssafy.springbootdeveloper.config.jwt.JwtProperties;
 import com.ssafy.springbootdeveloper.auth.domain.RefreshToken;
 import com.ssafy.springbootdeveloper.auth.dto.CreateAccessTokenRequest;
 import com.ssafy.springbootdeveloper.auth.dto.CreateTokenRequest;
-import com.ssafy.springbootdeveloper.auth.repository.RefreshTokenRespository;
+import com.ssafy.springbootdeveloper.auth.repository.RefreshTokenRepository;
+import com.ssafy.springbootdeveloper.config.jwt.JwtFactory;
+import com.ssafy.springbootdeveloper.config.jwt.JwtProperties;
 import com.ssafy.springbootdeveloper.user.domain.User;
 import com.ssafy.springbootdeveloper.user.dto.AddUserRequest;
 import com.ssafy.springbootdeveloper.user.repository.UserRepository;
@@ -20,9 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Map;
 
@@ -52,7 +50,7 @@ class AuthApiControllerTest {
     UserService userService;
 
     @Autowired
-    RefreshTokenRespository refreshTokenRespository;
+    RefreshTokenRepository refreshTokenRepository;
 
     private final String BASE_URL = "/api/auth";
 
@@ -78,7 +76,7 @@ class AuthApiControllerTest {
             .build()
             .createToken(jwtProperties);
 
-        refreshTokenRespository.save(new RefreshToken(testUser.getId(), refreshToken));
+        refreshTokenRepository.save(new RefreshToken(testUser.getId(), refreshToken));
 
         CreateAccessTokenRequest request=new CreateAccessTokenRequest();
         request.setRefreshToken(refreshToken);
