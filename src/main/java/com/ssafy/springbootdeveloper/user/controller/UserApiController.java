@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
@@ -23,9 +25,10 @@ public class UserApiController {
     }
 
     @GetMapping
-    public ResponseEntity<GetUserResponse> getUser(Authentication authentication){
+    public ResponseEntity<GetUserResponse> getUser(Principal principal){
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication.getPrincipal() instanceof User u){
+//        Principal principal = authentication.getPrincipal();
+        if(principal instanceof User u){
             User user = userService.findByEmail(u.getEmail());
             GetUserResponse userResponse = new GetUserResponse(user);
             return ResponseEntity.ok(userResponse);
