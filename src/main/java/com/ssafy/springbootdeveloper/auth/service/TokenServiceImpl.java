@@ -5,6 +5,8 @@ import com.ssafy.springbootdeveloper.auth.domain.RefreshToken;
 import com.ssafy.springbootdeveloper.auth.repository.RefreshTokenRepository;
 import com.ssafy.springbootdeveloper.user.domain.User;
 import com.ssafy.springbootdeveloper.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class TokenServiceImpl implements TokenService {
     private final TokenProvider tokenProvider;
     private final RefreshTokenService refreshTokenService;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final UserService userService;
 
     @Override
@@ -37,7 +38,12 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public String createRefreshToken(User user) {
         String refreshToken = tokenProvider.generateToken(user, JwtProperties.REFRESH_TOKEN_DURATION);
-        refreshTokenRepository.save(new RefreshToken(user.getId(), refreshToken));
+        refreshTokenService.saveRefreshToken(user.getId(), refreshToken);
         return refreshToken;
+    }
+
+    @Override
+    public void addRefreshTokenToCookie(HttpServletRequest request, HttpServletResponse response, String refreshToken) {
+        refreshTokenService.addRefreshTokenToCookie(request, response, refreshToken);
     }
 }
