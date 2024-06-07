@@ -4,12 +4,14 @@ import com.ssafy.springbootdeveloper.auth.handler.OAuth2SuccessHandler;
 import com.ssafy.springbootdeveloper.auth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.ssafy.springbootdeveloper.auth.repository.RefreshTokenRepository;
 import com.ssafy.springbootdeveloper.auth.service.OAuth2UserCustomService;
+import com.ssafy.springbootdeveloper.auth.service.RefreshTokenService;
 import com.ssafy.springbootdeveloper.auth.service.TokenProvider;
 import com.ssafy.springbootdeveloper.filter.TokenAuthenticationFilter;
 import com.ssafy.springbootdeveloper.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -30,7 +32,7 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 public class WebOAuthSecurityConfig {
     private final OAuth2UserCustomService oAuth2UserCustomService;
     private final TokenProvider tokenProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenService refreshTokenService;
     private final UserService userService;
 
     @Bean
@@ -66,6 +68,7 @@ public class WebOAuthSecurityConfig {
         // 토큰 재발급 URL, jwt login은 인증 없이 접근 가능하도록 설정. 나머지 API URL은 인증 필요
         http.authorizeRequests()
             .requestMatchers("/api/auth/refresh","/api/auth/login").permitAll()
+            .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
             .requestMatchers("/api/**").authenticated()
             .anyRequest().permitAll();
 
@@ -90,7 +93,7 @@ public class WebOAuthSecurityConfig {
     @Bean
     public OAuth2SuccessHandler oAuth2SuccessHandler() {
         return new OAuth2SuccessHandler(tokenProvider,
-            refreshTokenRepository,
+            refreshTokenService,
             oAuth2AuthorizationRequestBasedOnCookieRepository(),
             userService
         );
