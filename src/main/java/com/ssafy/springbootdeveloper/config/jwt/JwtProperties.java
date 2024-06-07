@@ -14,6 +14,7 @@ import java.time.Duration;
 public class JwtProperties {
     private String issuer;
     private String secretKey;
-    public final static Duration ACCESS_TOKEN_DURATION = Duration.ofHours(1);
-    public final static Duration REFRESH_TOKEN_DURATION = Duration.ofHours(6);
+    public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
+    public final static Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
+    public final static Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
 }
