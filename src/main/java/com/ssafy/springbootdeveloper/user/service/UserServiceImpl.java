@@ -60,8 +60,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByTokenRequest(CreateTokenRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(()->new IllegalArgumentException(request.getEmail()));
+        User user = findByEmail(request.getEmail());
+        System.out.println(user);
 
         if(bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())){
             return user;
