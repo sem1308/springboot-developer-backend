@@ -7,6 +7,9 @@ import com.ssafy.springbootdeveloper.auth.dto.CreateTokenResponse;
 import com.ssafy.springbootdeveloper.auth.service.TokenService;
 import com.ssafy.springbootdeveloper.user.domain.User;
 import com.ssafy.springbootdeveloper.user.service.UserService;
+import com.ssafy.springbootdeveloper.util.CookieUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +33,14 @@ public class AuthApiController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<CreateTokenResponse> login(@RequestBody CreateTokenRequest request){
-//        System.out.println(request);
-        User user = userService.findByTokenRequest(request);
+    public ResponseEntity<CreateTokenResponse> login(@RequestBody CreateTokenRequest tokenRequest, HttpServletRequest request, HttpServletResponse response){
+        System.out.println(tokenRequest);
+        User user = userService.findByTokenRequest(tokenRequest);
+        System.out.println(user);
 
         String accessToken = tokenService.createAccessToken(user);
         String refreshToken = tokenService.createRefreshToken(user);
+        tokenService.addRefreshTokenToCookie(request,response,refreshToken);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new CreateTokenResponse(accessToken,refreshToken));
