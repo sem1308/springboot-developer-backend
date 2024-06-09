@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -21,7 +22,7 @@ import java.util.Set;
 @Service
 public class TokenProvider {
     private final JwtProperties jwtProperties;
-
+    public static final String REDIRECT_PATH = "http://localhost:5173/auth/handle";
     public String generateToken(User user, Duration expiredAt){
         Date now = new Date();
         return makeToken(new Date(now.getTime() + expiredAt.toMillis()), user);
@@ -51,6 +52,13 @@ public class TokenProvider {
         }catch (Exception e){
             return false;
         }
+    }
+
+    public String getTargetUrl(String token) {
+        return UriComponentsBuilder.fromUriString(REDIRECT_PATH)
+            .queryParam("token", token)
+            .build()
+            .toUriString();
     }
 
     public Authentication getAuthentication(String token) {

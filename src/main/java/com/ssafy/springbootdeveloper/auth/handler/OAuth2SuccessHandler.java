@@ -1,14 +1,10 @@
 package com.ssafy.springbootdeveloper.auth.handler;
 
-import com.ssafy.springbootdeveloper.auth.domain.RefreshToken;
 import com.ssafy.springbootdeveloper.auth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
-import com.ssafy.springbootdeveloper.auth.repository.RefreshTokenRepository;
 import com.ssafy.springbootdeveloper.auth.service.RefreshTokenService;
 import com.ssafy.springbootdeveloper.auth.service.TokenProvider;
 import com.ssafy.springbootdeveloper.user.domain.User;
 import com.ssafy.springbootdeveloper.user.service.UserService;
-import com.ssafy.springbootdeveloper.util.CookieUtil;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.time.Duration;
 
 import static com.ssafy.springbootdeveloper.config.jwt.JwtProperties.ACCESS_TOKEN_DURATION;
 import static com.ssafy.springbootdeveloper.config.jwt.JwtProperties.REFRESH_TOKEN_DURATION;
@@ -27,7 +21,6 @@ import static com.ssafy.springbootdeveloper.config.jwt.JwtProperties.REFRESH_TOK
 @RequiredArgsConstructor
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    public static final String REDIRECT_PATH = "http://localhost:5173/auth/handle";
     private final TokenProvider tokenProvider;
     private final RefreshTokenService refreshTokenService;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
@@ -43,7 +36,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         refreshTokenService.addRefreshTokenToCookie(request, response, refreshToken);
         // 액세스 토큰 생성 -> 패스에 액세스 토큰 추가
         String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
-        String targetUrl = getTargetUrl(accessToken);
+        String targetUrl = tokenProvider.getTargetUrl(accessToken);
         // 인증 관련 설정값, 쿠키 제거
         clearAuthenticationAttributes(request, response);
         // 리다이렉트
@@ -55,11 +48,5 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         super.clearAuthenticationAttributes(request);
         authorizationRequestRepository.removeAuthorizationRequestCookies(request,
             response);
-    }
-    private String getTargetUrl(String token) {
-        return UriComponentsBuilder.fromUriString(REDIRECT_PATH)
-            .queryParam("token", token)
-            .build()
-            .toUriString();
     }
 }
