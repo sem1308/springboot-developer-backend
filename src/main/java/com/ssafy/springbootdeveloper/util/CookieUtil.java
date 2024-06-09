@@ -21,18 +21,28 @@ public class CookieUtil {
     public static void deleteCookie(HttpServletRequest
     request, HttpServletResponse
     response, String name) {
+        Cookie cookie = getCookie(request,name);
+        deleteCookie(cookie, response);
+    }
+    public static void deleteCookie(Cookie cookie, HttpServletResponse response) {
+        cookie.setValue("");
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
+
+    public static Cookie getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
-            return;
-        }
-        for (Cookie cookie : cookies) {
-            if (name.equals(cookie.getName())) {
-                cookie.setValue("");
-                cookie.setPath("/");
-                cookie.setMaxAge(0);
-                response.addCookie(cookie);
+        Cookie foundCookie = null;
+        if(cookies != null){
+            for (Cookie cookie : cookies) {
+                if (name.equals(cookie.getName())) {
+                    foundCookie = cookie;
+                    break;
+                }
             }
         }
+        return foundCookie;
     }
 
     // 객체를 직렬화해 쿠키의 값으로 변환

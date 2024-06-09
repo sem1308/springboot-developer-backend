@@ -10,12 +10,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
-public class TokenServiceImpl implements TokenService {
+public class TokenServiceImpl extends RefreshTokenServiceImpl implements TokenService {
     private final TokenProvider tokenProvider;
-    private final RefreshTokenService refreshTokenService;
     private final UserService userService;
+
+    public TokenServiceImpl(RefreshTokenRepository refreshTokenRepository, TokenProvider tokenProvider, UserService userService) {
+        super(refreshTokenRepository);
+        this.tokenProvider = tokenProvider;
+        this.userService = userService;
+    }
 
     @Override
     public String createNewAccessToken(String refreshToken) {
@@ -23,8 +27,7 @@ public class TokenServiceImpl implements TokenService {
             throw new IllegalArgumentException("Unexpected token");
         }
 
-        Long userId = refreshTokenService.findByRefreshToken(refreshToken).getUserId();
-
+        Long userId = findByRefreshToken(refreshToken).getUserId();
         User user = userService.findById(userId);
 
         return createAccessToken(user);
@@ -38,12 +41,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public String createRefreshToken(User user) {
         String refreshToken = tokenProvider.generateToken(user, JwtProperties.REFRESH_TOKEN_DURATION);
-        refreshTokenService.saveRefreshToken(user.getId(), refreshToken);
+        saveRefreshToken(user.getId(), refreshToken);
         return refreshToken;
-    }
-
-    @Override
-    public void addRefreshTokenToCookie(HttpServletRequest request, HttpServletResponse response, String refreshToken) {
-        refreshTokenService.addRefreshTokenToCookie(request, response, refreshToken);
     }
 }

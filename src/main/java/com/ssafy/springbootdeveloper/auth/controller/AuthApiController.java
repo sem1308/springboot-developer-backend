@@ -8,6 +8,7 @@ import com.ssafy.springbootdeveloper.auth.service.TokenService;
 import com.ssafy.springbootdeveloper.user.domain.User;
 import com.ssafy.springbootdeveloper.user.service.UserService;
 import com.ssafy.springbootdeveloper.util.CookieUtil;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,9 @@ public class AuthApiController {
     public ResponseEntity<CreateAccessTokenResponse> createNewAccessToken(
             @RequestBody CreateAccessTokenRequest request
         ){
+        System.out.println("[REFRESH]");
         String newAccessToken = tokenService.createNewAccessToken(request.getRefreshToken());
+        System.out.println("newAccessToken : " + newAccessToken);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new CreateAccessTokenResponse(newAccessToken));
@@ -44,5 +47,13 @@ public class AuthApiController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new CreateTokenResponse(accessToken,refreshToken));
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<CreateTokenResponse> logout(HttpServletRequest request, HttpServletResponse response){
+        System.out.println("[LOGOUT]");
+        tokenService.removeRefreshToken(request, response);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
