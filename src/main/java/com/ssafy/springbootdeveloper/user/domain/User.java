@@ -75,7 +75,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.nickname;
     }
 
     // 계정 만료 여부 반환

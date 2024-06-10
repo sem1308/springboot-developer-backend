@@ -5,6 +5,7 @@ import com.ssafy.springbootdeveloper.blog.dto.AddArticleRequest;
 import com.ssafy.springbootdeveloper.blog.dto.UpdateArticleRequest;
 import com.ssafy.springbootdeveloper.blog.repository.BlogRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,10 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public void delete(long id) {
+        Article article = findById(id);
+
+        authorizeArticleAuthor(article);
+
         blogRepository.deleteById(id);
     }
 
@@ -42,8 +47,17 @@ public class BlogServiceImpl implements BlogService {
     public Article update(long id, UpdateArticleRequest request) {
         Article article = findById(id);
 
+        authorizeArticleAuthor(article);
         article.update(request.getTitle(),request.getContent());
 
         return article;
+    }
+
+    private static void authorizeArticleAuthor(Article article){
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (!article.getAuthor().equals(userName)) {
+            throw new IllegalArgumentException("not authorized");
+        }
     }
 }

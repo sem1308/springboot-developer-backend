@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(
             User.builder()
                 .email(request.getEmail())
+                .nickname(request.getNickname())
                 .password(bCryptPasswordEncoder.encode(request.getPassword()))
                 .build()
         ).getId();

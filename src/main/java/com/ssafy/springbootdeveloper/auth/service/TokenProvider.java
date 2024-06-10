@@ -38,6 +38,7 @@ public class TokenProvider {
             .setExpiration(expiry) // 내용 exp : expiry 멤버 변숫값
             .setSubject(user.getEmail()) // 내용 sub : 유저의 이메일
             .claim("id", user.getId()) // 클레임 id : 유저 ID
+            .claim("nickname", user.getNickname()) // 클레임 id : 유저 ID
             // 서명 : 비밀값과 함께 해시값을 HS256 방식으로 암호화
             .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
             .compact();
@@ -63,11 +64,12 @@ public class TokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
-        Long userId = getUserId(claims);
+        Long userId =  claims.get("id", Long.class);
+        String nickname = claims.get("nickname", String.class);
         // TODO : 실제 user의 권한 가져오기
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new
             SimpleGrantedAuthority("ROLE_USER"));
-        return new UsernamePasswordAuthenticationToken(User.builder().email(claims.getSubject()).password("").authorities(authorities).build(), token, authorities);
+        return new UsernamePasswordAuthenticationToken(User.builder().email(claims.getSubject()).password("").nickname(nickname).authorities(authorities).build(), token, authorities);
     }
 
     public Long getUserId(String token) {
